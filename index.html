@@ -144,3 +144,14 @@ renderProducts(products);
 <div id="cart">
   <h3>Cart (<span id="cartCount">0</span>)</h3>
   <ul id="cartIte
+Cart (<span id="cart-count">0</span>)
+    <script>
+let cartCount = 0;
+
+function addToCart() {
+  cartCount++;
+  document.getElementById("cart-count").innerText = cartCount;
+  alert("Product added to cart!");
+}
+    </script>
+    <button onclick="addToCart()">Add to Cart</button>
