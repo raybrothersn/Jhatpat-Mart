@@ -108,14 +108,4 @@ document.getElementById('searchInput').addEventListener('input',function(){
   const term = this.value.toLowerCase();
   const filtered = products.filter(p=>p.name.toLowerCase().includes(term));
   renderProducts(filtered);
-});
-function addToCart(name,price){cart.push({name,price});document.getElementById('cartCount').innerText = cart.length;}
-function openCart(){document.getElementById('cartModal').style.display='flex';}
-function closeCart(){document.getElementById('cartModal').style.display='none';}
-function checkout(){if(cart.length===0){alert("Cart is empty!"); return;}document.getElementById('cartModal').style.display='none';document.getElementById('confirmation').style.display='flex';cart=[];document.getElementById('cartCount').innerText='0';}
-function closeConfirm(){document.getElementById('confirmation').style.display='none';}
-renderProducts(products);
-</script>
-</body>
-</html>
-<style>
+
