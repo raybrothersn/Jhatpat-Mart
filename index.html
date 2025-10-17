@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JhatPat Mart</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#f8f8f8;color:#333;}
+a{text-decoration:none;color:inherit;}
+header{background:#ff3f6c;color:#fff;padding:20px;}
+.header-container{display:flex;justify-content:space-between;align-items:center;max-width:1200px;margin:0 auto;}
+.logo{font-size:1.8em;font-weight:700;}
+.search-bar input{padding:8px;width:200px;border-radius:5px;border:none;}
+.cart{font-size:1.2em;cursor:pointer;}
+.hero{background:url('https://via.placeholder.com/1200x400/ff3f6c/fff?text=JhatPat+Mart+Banner') no-repeat center/cover;height:400px;display:flex;justify-content:center;align-items:center;color:#fff;font-size:2em;font-weight:700;text-shadow:2px 2px 5px #000;}
+.categories{max-width:1200px;margin:40px auto;display:flex;justify-content:space-around;flex-wrap:wrap;gap:20px;}
+.category{background:#fff;padding:20px;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,0.1);flex:1 1 150px;text-align:center;transition:0.3s;cursor:pointer;}
+.category:hover{transform:scale(1.05);}
+.category img{width:100px;height:100px;object-fit:cover;border-radius:50%;}
+.products{max-width:1200px;margin:40px auto;display:flex;flex-wrap:wrap;gap:25px;justify-content:center;}
+.product{background:#fff;width:220px;border-radius:10px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.1);transition:0.3s;}
+.product:hover{transform:scale(1.05);}
+.product img{width:100%;height:200px;object-fit:cover;}
+.product-content{padding:15px;text-align:center;}
+.product-content h3{margin:10px 0 5px;font-size:1.1em;}
+.product-content p{color:#555;font-weight:600;}
+.product-content button{display:inline-block;margin-top:10px;padding:10px 15px;background:#28a745;color:#fff;border-radius:5px;font-weight:600;cursor:pointer;transition:0.3s;}
+.product-content button:hover{background:#218838;}
+#cartModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);justify-content:center;align-items:center;}
+#cartContent{background:#fff;padding:20px;width:90%;max-width:500px;border-radius:10px;position:relative;}
+#cartContent h2{margin-bottom:15px;}
+#closeCart{position:absolute;top:10px;right:15px;cursor:pointer;font-weight:bold;color:#ff3f6c;}
+#confirmation{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);justify-content:center;align-items:center;}
+#confirmationContent{background:#fff;padding:20px;width:90%;max-width:400px;border-radius:10px;text-align:center;}
+#closeConfirm{position:absolute;top:10px;right:15px;cursor:pointer;font-weight:bold;color:#ff3f6c;}
+footer{background:#ff3f6c;color:#fff;text-align:center;padding:25px 10px;margin-top:40px;}
+footer a{color:#fff;text-decoration:underline;}
+@media(max-width:768px){
+.header-container{flex-direction:column;gap:15px;}
+.search-bar input{width:100%;}
+.categories{flex-direction:column;align-items:center;}
+.products{flex-direction:column;align-items:center;}
+.product{width:90%;}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-container">
+    <div class="logo">JhatPat Mart</div>
+    <div class="search-bar"><input type="text" id="searchInput" placeholder="Search products..."></div>
+    <div class="cart" onclick="openCart()">🛒 Cart (<span id="cartCount">0</span>)</div>
+  </div>
+</header>
+<section class="hero">Fast Delivery • Order Now!</section>
+<section class="categories">
+  <div class="category" onclick="filterCategory('Women')"><img src="https://via.placeholder.com/100?text=Women"><h4>Women</h4></div>
+  <div class="category" onclick="filterCategory('Men')"><img src="https://via.placeholder.com/100?text=Men"><h4>Men</h4></div>
+  <div class="category" onclick="filterCategory('Electronics')"><img src="https://via.placeholder.com/100?text=Electronics"><h4>Electronics</h4></div>
+  <div class="category" onclick="filterCategory('Beauty')"><img src="https://via.placeholder.com/100?text=Beauty"><h4>Beauty</h4></div>
+</section>
+<section class="products" id="productContainer"></section>
+<footer>
+  <p>Contact us: <a href="https://wa.me/8801893896251" target="_blank">WhatsApp</a></p>
+  <p>&copy; 2025 JhatPat Mart. All rights reserved.</p>
+</footer>
+<div id="cartModal">
+  <div id="cartContent">
+    <span id="closeCart" onclick="closeCart()">X</span>
+    <h2>Cart</h2>
+    <ul id="cartList"></ul>
+    <button onclick="checkout()">Proceed to Checkout</button>
+  </div>
+</div>
+<div id="confirmation">
+  <div id="confirmationContent">
+    <span id="closeConfirm" onclick="closeConfirm()">X</span>
+    <h2>Thank You!</h2>
+    <p>Your order has been received. We will contact you shortly via WhatsApp.</p>
+  </div>
+</div>
+<script>
+const products = [
+  {name:"Phone Case",price:600,category:"Electronics",img:"https://via.placeholder.com/220x200?text=Phone+Case"},
+  {name:"Wireless Earphones",price:450,category:"Electronics",img:"https://via.placeholder.com/220x200?text=Earphones"},
+  {name:"Stylish Bag",price:1200,category:"Women",img:"https://via.placeholder.com/220x200?text=Bag"},
+  {name:"Sun Glasses",price:800,category:"Women",img:"https://via.placeholder.com/220x200?text=Sunglasses"},
+  {name:"Men Shoes",price:1500,category:"Men",img:"https://via.placeholder.com/220x200?text=Men+Shoes"}
+];
+let cart = [];
+function renderProducts(list){
+  const container = document.getElementById('productContainer');
+  container.innerHTML = '';
+  list.forEach(p=>{
+    const div = document.createElement('div');
+    div.className = 'product';
+    div.innerHTML = `<img src="${p.img}" alt="${p.name}"><div class="product-content"><h3>${p.name}</h3><p>৳${p.price}</p><button onclick="addToCart('${p.name}',${p.price})">Add to Cart</button></div>`;
+    container.appendChild(div);
+  });
+}
+function filterCategory(cat){
+  const filtered = products.filter(p=>p.category===cat);
+  renderProducts(filtered);
+}
+document.getElementById('searchInput').addEventListener('input',function(){
+  const term = this.value.toLowerCase();
+  const filtered = products.filter(p=>p.name.toLowerCase().includes(term));
+  renderProducts(filtered);
+});
+function addToCart(name,price){cart.push({name,price});document.getElementById('cartCount').innerText = cart.length;}
+function openCart(){document.getElementById('cartModal').style.display='flex';}
+function closeCart(){document.getElementById('cartModal').style.display='none';}
+function checkout(){if(cart.length===0){alert("Cart is empty!"); return;}document.getElementById('cartModal').style.display='none';document.getElementById('confirmation').style.display='flex';cart=[];document.getElementById('cartCount').innerText='0';}
+function closeConfirm(){document.getElementById('confirmation').style.display='none';}
+renderProducts(products);
+</script>
+</body>
+</html>
